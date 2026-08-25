@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;600;700&family=Tajawal:wght@400;500;700&display=swap');
+@import 'tailwindcss';
+
+:root {
+  --background: #eef2f6;        /* cool cloud neutral */
+  --foreground: #0f1a24;
+  --card: #ffffff;
+  --card-foreground: #0f1a24;
+  --primary: #0e4d6e;          /* deep ocean blue — brand */
+  --primary-foreground: #f2f8fb;
+  --secondary: #dde7ee;
+  --secondary-foreground: #34404c;
+  --muted: #e2eaf1;
+  --muted-foreground: #5c6875;
+  --accent: #1f8aa8;           /* bright teal-ocean */
+  --accent-foreground: #f2f8fb;
+  --border: rgba(15, 26, 36, 0.12);
+  --ring: #0e4d6e;
+  --radius: 2px;
+
+  /* section + data palette (maritime spectrum) */
+  --navy: #0a2230;
+  --teal: #0f7d86;
+  --coral: #d9663f;
+  --sand: #cf9a3c;
+  --sky: #3d84c6;
+  --tint-blue: #e4eef4;
+  --tint-teal: #e2f0f0;
+  --tint-sky: #e8eff7;
+
+  --font-display: "Marcellus", Georgia, serif;
+  --font-sans: "Archivo", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-ar: "El Messiri", "Tajawal", system-ui, sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+}
+
+/* Scrollbars: hidden until scrolling */
+@layer utilities {
+  .font-display { font-family: var(--font-display); }
+  .font-mono { font-family: var(--font-mono); }
+  .font-ar { font-family: var(--font-ar); }
+  .ar { font-family: var(--font-ar); direction: rtl; unicode-bidi: isolate; }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Cinematic keyframes */
+@keyframes dash-flow {
+  to { stroke-dashoffset: -1000; }
+}
+@keyframes cargo-move {
+  0%   { offset-distance: 0%;  opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+@keyframes pulse-port {
+  0%, 100% { opacity: 0.35; r: 2.5; }
+  50%      { opacity: 1;    r: 3.6; }
+}
+@keyframes ring-out {
+  0%   { r: 3; opacity: 0.55; }
+  100% { r: 26; opacity: 0; }
+}
+@keyframes drift {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow { animation: spin-slow 24s linear infinite; }
+
+.animate-drift { animation: drift 9s ease-in-out infinite; }
+.marquee-track { animation: marquee 42s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .marquee-track,
+  .animate-spin-slow,
+  .animate-drift { animation: none; }
+  [style*="cargo-move"], .cargo-dot { animation: none !important; opacity: 1 !important; }
+  .route-line { animation: none !important; }
+}

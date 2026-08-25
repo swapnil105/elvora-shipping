@@ -1,0 +1,14 @@
+{
+  "title": "ELVORA SHIPING",
+  "description": "Experience global trade and connectivity through an interactive platform showcasing Dubai's role as a gateway, enhancing ELVORA's international presence.",
+  "icons": {
+    "icon": "/favicon.svg"
+  },
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

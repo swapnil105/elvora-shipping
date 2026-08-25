@@ -1,0 +1,25 @@
+{
+  "name": "ELVORA SHIPPING · إلفورا للشحن",
+  "short_name": "ELVORA",
+  "description": "Global Freight Forwarding & Maritime Logistics · Dubai, U.A.E.",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#0e4d6e",
+  "background_color": "#061824",
+  "display": "standalone"
+}
