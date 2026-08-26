@@ -24,7 +24,6 @@ function Nav() {
     ["Journey", "#journey"],
     ["Services", "#services"],
     ["Network", "#network"],
-    ["Company", "#company"],
   ];
 
   return (
@@ -570,7 +569,7 @@ function Footer() {
           </div>
         </div>
         <div className="flex flex-wrap gap-x-10 gap-y-3 text-sm text-secondary-foreground">
-          {["Journey", "Services", "Network", "Company", "Request a Quote"].map((l) => (
+          {["Journey", "Services", "Network", "Request a Quote"].map((l) => (
             <a key={l} href={`#${l.split(" ")[0].toLowerCase()}`} className="hover:text-foreground">
               {l}
             </a>
@@ -597,7 +596,7 @@ export default function App() {
         <Journey />
         <Services />
         <Network />
-        <Company />
+        {/* <Company /> */}
         <Quote />
       </main>
       <Footer />
