@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useReveal } from "./hooks/useReveal";
 import NetworkMap from "./components/NetworkMap";
 import LogoBadge from "./components/LogoBadge";
+import logo from "./imports/LOGO_BLUE.png";
 
 function palette(i: number) {
   const colors = ["var(--primary)", "var(--teal)", "var(--sand)", "var(--sky)", "var(--coral)", "var(--accent)"];
@@ -28,9 +29,8 @@ function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-        scrolled ? "bg-background/90 backdrop-blur-md border-b border-border" : "bg-transparent"
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${scrolled ? "bg-background/90 backdrop-blur-md border-b border-border" : "bg-transparent"
+        }`}
     >
       {/* announcement banner */}
       <div className="overflow-hidden bg-[#f2c53d] py-2 text-[#0a2230]">
@@ -52,9 +52,8 @@ function Nav() {
       </div>
 
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
-        <a href="#top" className="flex items-baseline gap-3">
-          <span className="font-display text-2xl tracking-[0.32em] text-foreground">ELVORA</span>
-          <span className="ar text-sm text-muted-foreground">إلفورا للشحن</span>
+        <a href="#top" className="flex items-center">
+          <img src={logo} alt="ELVORA Shipping L.L.C." className="h-20 w-auto" />
         </a>
         <nav className="hidden items-center gap-9 md:flex">
           {links.map(([label, href]) => (
@@ -560,7 +559,7 @@ function Footer() {
         <div className="flex items-center gap-4">
           <LogoBadge size={72} />
           <div>
-            <div className="font-display text-2xl tracking-[0.32em]">ELVORA</div>
+            <img src={logo} alt="ELVORA Shipping L.L.C." className="h-10 w-auto" />
             <p className="ar text-sm text-secondary-foreground">إلفورا للشحن والخدمات اللوجستية</p>
             <p className="mt-1 text-sm text-muted-foreground">Shipping &amp; Logistics · Dubai, U.A.E.</p>
             <a href={`mailto:${EMAIL}`} className="mt-1 inline-block text-sm text-accent transition-colors hover:text-primary">
