@@ -21,4 +21,8 @@ logs/
 
 .DS_Store
 *.zip
+*.pdf
+*.xlsx
+*.docx
+
 
