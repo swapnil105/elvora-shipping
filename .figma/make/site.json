@@ -1,11 +1,15 @@
 {
-  "title": "ELVORA SHIPING",
-  "description": "Experience global trade and connectivity through an interactive platform showcasing Dubai's role as a gateway, enhancing ELVORA's international presence.",
+  "title": "ELVORA Shipping | Global Freight Forwarding & Maritime Logistics Dubai",
+  "description": "ELVORA Shipping L.L.C. is a premier Dubai-based freight forwarding and maritime logistics partner. Connecting East & West across ocean freight (FCL/LCL), air cargo, land transport, and customs clearance.",
+  "language": "en",
   "icons": {
     "icon": "/favicon.svg"
   },
   "robots": {
-    "index": false
+    "index": true
+  },
+  "openGraph": {
+    "image": "/apple-touch-icon.png"
   },
   "accessibility": {
     "addBypassLinks": false,

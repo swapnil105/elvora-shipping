@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useReveal } from "./hooks/useReveal";
-import NetworkMap from "./components/NetworkMap";
+const NetworkMap = lazy(() => import("./components/NetworkMap"));
 import LogoBadge from "./components/LogoBadge";
 import logo from "./imports/LOGO_BLUE.png";
 
@@ -10,6 +10,12 @@ function palette(i: number) {
 }
 
 const EMAIL = "sales@elvorashipping.com";
+const PHONE = "+971504221950";
+const PHONE_DISPLAY = "+971 50 422 1950";
+const ADDRESS = "Bur Dubai, Dubai, United Arab Emirates";
+const DEFAULT_GOOGLE_SHEETS_URL =
+  "https://script.google.com/macros/s/AKfycbzkel15iDJkcWFtg3eHWWcFqjgplx8ziFxS3AhAR9ROzzwXAMCt_VRe3KnGHF3tGsrB/exec";
+const GOOGLE_SHEETS_URL = import.meta.env.VITE_GOOGLE_SHEETS_URL || DEFAULT_GOOGLE_SHEETS_URL;
 
 /* ----------------------------------------------------------------- Nav ---- */
 function Nav() {
@@ -29,8 +35,9 @@ function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${scrolled ? "bg-background/90 backdrop-blur-md border-b border-border" : "bg-transparent"
-        }`}
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
+        scrolled ? "bg-background/90 backdrop-blur-md border-b border-border" : "bg-transparent"
+      }`}
     >
       {/* announcement banner */}
       <div className="overflow-hidden bg-[#f2c53d] py-2 text-[#0a2230]">
@@ -52,10 +59,16 @@ function Nav() {
       </div>
 
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
-        <a href="#top" className="flex items-center">
-          <img src={logo} alt="ELVORA Shipping L.L.C." className="h-20 w-auto" />
+        <a href="#top" className="flex items-center" aria-label="ELVORA Shipping Home">
+          <img
+            src={logo}
+            alt="ELVORA Shipping L.L.C. - Freight Forwarding & Logistics Dubai"
+            className="h-20 w-auto"
+            width={220}
+            height={80}
+          />
         </a>
-        <nav className="hidden items-center gap-9 md:flex">
+        <nav className="hidden items-center gap-9 md:flex" aria-label="Primary Navigation">
           {links.map(([label, href]) => (
             <a
               key={href}
@@ -71,7 +84,7 @@ function Nav() {
           className="group inline-flex items-center gap-2 border border-primary/60 px-5 py-2.5 text-sm text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
         >
           Request a Quote
-          <span className="transition-transform group-hover:translate-x-1">→</span>
+          <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
         </a>
       </div>
     </header>
@@ -125,7 +138,10 @@ function Hero() {
       <div className="absolute inset-0">
         <img
           src="https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?w=2000&h=1200&fit=crop&auto=format"
-          alt="Container port at dusk"
+          alt="Commercial container ship navigating deep ocean trade waters at dusk"
+          fetchPriority="high"
+          width={2000}
+          height={1200}
           className="h-full w-full object-cover opacity-40"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/85 to-background/40" />
@@ -156,7 +172,7 @@ function Hero() {
             className="group inline-flex shrink-0 items-center gap-3 bg-primary px-7 py-4 text-primary-foreground transition-transform hover:-translate-y-0.5"
           >
             Move your cargo <span className="ar">/ اشحن الآن</span>
-            <span className="transition-transform group-hover:translate-x-1">→</span>
+            <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
           </a>
         </div>
       </div>
@@ -182,7 +198,7 @@ function Ticker() {
         {row.map((t, i) => (
           <span key={i} className="flex items-center gap-12 font-mono text-sm tracking-[0.2em] text-muted-foreground">
             {t}
-            <span className="text-accent">✳</span>
+            <span className="text-accent" aria-hidden="true">✳</span>
           </span>
         ))}
       </div>
@@ -247,36 +263,42 @@ function Services() {
       ar: "الشحن البحري",
       d: "Full-container (FCL) and consolidated (LCL) sea freight across major global trade lanes.",
       img: "photo-1605745341112-85968b19335b",
+      alt: "Full-container vessel carrying ocean cargo across international maritime trade routes",
     },
     {
       t: "Air Freight",
       ar: "الشحن الجوي",
       d: "Time-critical and general air cargo with reliable capacity to and from Dubai.",
       img: "photo-1436491865332-7a61a109cc05",
+      alt: "Commercial cargo aircraft scheduled for international air freight transit",
     },
     {
       t: "Land Transport",
       ar: "النقل البري",
       d: "Road haulage and cross-border trucking across the GCC and regional corridors.",
       img: "photo-1601584115197-04ecc0da31d7",
+      alt: "Heavy freight transport truck on regional road logistics corridor",
     },
     {
       t: "Freight Forwarding",
       ar: "التخليص والشحن",
       d: "End-to-end coordination of multimodal shipments under one accountable partner.",
       img: "photo-1578575437130-527eed3abbec",
+      alt: "Intermodal shipping terminal with stacked cargo containers and gantry cranes",
     },
     {
       t: "Customs & Documentation",
       ar: "الجمارك والمستندات",
       d: "Clearance, duties and compliance handled at both origin and destination.",
       img: "photo-1568430462989-44163eb1752f",
+      alt: "Maritime customs clearance documents and port compliance inspection",
     },
     {
       t: "Warehousing & Distribution",
       ar: "التخزين والتوزيع",
       d: "Storage, consolidation and distribution solutions built around your supply chain.",
       img: "photo-1553413077-190dd305871c",
+      alt: "Industrial logistics warehouse facility with organized pallet storage",
     },
   ];
   return (
@@ -291,7 +313,7 @@ function Services() {
             <p className="ar mt-3 text-xl text-accent">شريك واحد لكل وسائل النقل</p>
           </div>
           <p className="max-w-sm text-sm text-muted-foreground">
-            Confirm your active service lines with ELVORA — only offer what the company genuinely provides.
+            Connecting Dubai to major international maritime trade lanes and cargo airports worldwide.
           </p>
         </div>
 
@@ -305,8 +327,11 @@ function Services() {
               <div className="aspect-[16/10] overflow-hidden bg-secondary">
                 <img
                   src={`https://images.unsplash.com/${s.img}?w=900&h=560&fit=crop&auto=format`}
-                  alt={s.t}
+                  alt={s.alt}
                   loading="lazy"
+                  decoding="async"
+                  width={900}
+                  height={560}
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <span
@@ -353,59 +378,7 @@ function Network() {
           </p>
         </div>
         <div className="reveal rounded-sm border border-white/10 bg-white/5 p-4 backdrop-blur-sm sm:p-8">
-          <NetworkMap />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* --------------------------------------------------------------- Company --- */
-function Company() {
-  // Verifiable facts from the site itself — no invented volumes.
-  const stats = [
-    ["6", "Continents reached", "Ocean · Air · Land"],
-    ["10+", "Active trade lanes", "East ⇄ West"],
-    ["3", "Transport modes", "Sea · Air · Road"],
-    ["24/7", "Operations desk", "For active shipments"],
-  ];
-  return (
-    <section id="company" className="border-t border-border bg-[var(--tint-sky)] py-28">
-      <div className="mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-2 lg:px-10">
-        <div className="reveal">
-          <p className="label mb-5">The Company · <span className="ar">عن الشركة</span></p>
-          <h2 className="font-display text-4xl leading-tight sm:text-5xl">
-            Serious about the business of moving business.
-          </h2>
-          <p className="ar mt-3 text-xl text-accent">جادّون في عمل نقل الأعمال</p>
-          <p className="mt-6 text-lg leading-relaxed text-secondary-foreground">
-            ELVORA Shipping L.L.C. is a Dubai-based freight and logistics company built for international trade. We
-            combine local knowledge of one of the world&apos;s busiest trade hubs with a global carrier and partner
-            network.
-          </p>
-          <p className="mt-4 leading-relaxed text-muted-foreground">
-            Our promise is simple: clear communication, accountable handovers, and cargo that arrives as planned.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            {["Importers", "Exporters", "Manufacturers", "Distributors", "Traders"].map((c) => (
-              <span key={c} className="border border-border px-4 py-2 text-xs tracking-wide text-secondary-foreground">
-                {c}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="reveal grid grid-cols-2 gap-px self-start overflow-hidden border border-border bg-border">
-          {stats.map(([v, l, note], i) => (
-            <div key={l} className="relative bg-card p-8">
-              <span className="absolute inset-x-0 top-0 h-1" style={{ background: palette(i) }} />
-              <div className="font-display text-4xl" style={{ color: palette(i) }}>{v}</div>
-              <div className="mt-2 text-sm text-secondary-foreground">{l}</div>
-              <div className="mt-3 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-muted-foreground">
-                {note}
-              </div>
-            </div>
-          ))}
+          <Suspense fallback={<div className="flex h-[380px] w-full items-center justify-center font-mono text-xs text-white/40"><span className="h-2 w-2 mr-2 rounded-full bg-[var(--accent)] animate-ping" />Connecting trade corridors...</div>}><NetworkMap /></Suspense>
         </div>
       </div>
     </section>
@@ -413,46 +386,180 @@ function Company() {
 }
 
 /* ----------------------------------------------------------------- CTA ----- */
+function parseEnquiryDetails(rawDetails: string) {
+  let phone = "";
+  let service = "";
+  let origin = "";
+  let destination = "";
+  let cleanDetails = rawDetails;
+
+  const phoneMatch = rawDetails.match(/(?:^|\n)\s*(?:Phone|Tel|Mobile|WhatsApp)\s*:\s*([^\n]+)/i);
+  if (phoneMatch) phone = phoneMatch[1].trim();
+
+  const serviceMatch = rawDetails.match(/(?:^|\n)\s*(?:Service|Mode|Freight Type)\s*:\s*([^\n]+)/i);
+  if (serviceMatch) service = serviceMatch[1].trim();
+
+  const originMatch = rawDetails.match(/(?:^|\n)\s*(?:Origin|From|POL)\s*:\s*([^\n]+)/i);
+  if (originMatch) origin = originMatch[1].trim();
+
+  const destMatch = rawDetails.match(/(?:^|\n)\s*(?:Destination|Dest|To|POD)\s*:\s*([^\n]+)/i);
+  if (destMatch) destination = destMatch[1].trim();
+
+  const detailsMatch = rawDetails.match(/(?:^|\n)\s*(?:Details|Cargo|Cargo Details|Notes)\s*:\s*([\s\S]+)$/i);
+  if (detailsMatch && (phoneMatch || serviceMatch || originMatch || destMatch)) {
+    cleanDetails = detailsMatch[1].trim();
+  }
+
+  return { phone, service, origin, destination, cleanDetails };
+}
+
 function Quote() {
   const [form, setForm] = useState({ name: "", company: "", email: "", details: "" });
-  const [trap, setTrap] = useState(""); // honeypot — must stay empty
-  const [error, setError] = useState("");
-  const [sent, setSent] = useState(false);
+  const [trap, setTrap] = useState(""); // honeypot — maps to website parameter
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [status, setStatus] = useState<"idle" | "submitting" | "delivered" | "error">("idle");
+  const [referenceId, setReferenceId] = useState<string | null>(null);
 
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((f) => ({ ...f, [k]: e.target.value }));
+    if (fieldErrors[k]) {
+      setFieldErrors((prev) => {
+        const next = { ...prev };
+        delete next[k];
+        return next;
+      });
+    }
+    if (serverError) setServerError(null);
+  };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const validate = () => {
+    const errors: Record<string, string> = {};
+    if (!form.name.trim()) {
+      errors.name = "Please enter your full name.";
+    } else if (form.name.trim().length > 80) {
+      errors.name = "Name must be 80 characters or less.";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.email.trim()) {
+      errors.email = "Please enter your email address.";
+    } else if (!emailRegex.test(form.email.trim())) {
+      errors.email = "Please enter a valid email address (e.g. name@company.com).";
+    } else if (form.email.trim().length > 120) {
+      errors.email = "Email must be 120 characters or less.";
+    }
+
+    if (!form.details.trim()) {
+      errors.details = "Please enter your shipment requirements (origin, destination, cargo type).";
+    } else if (form.details.trim().length < 5) {
+      errors.details = "Please provide more details regarding your shipment.";
+    } else if (form.details.trim().length > 2000) {
+      errors.details = "Details must be 2000 characters or less.";
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    // spam trap: silently accept and stop if a bot filled the hidden field
+    if (status === "submitting") return;
+    setServerError(null);
+
+    // Honeypot spam check: simulate instant silent success for bots
     if (trap) {
-      setSent(true);
+      setStatus("delivered");
+      setReferenceId("ELV-SPM-OK");
       return;
     }
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
-    if (!form.name.trim() || !emailOk || !form.details.trim()) {
-      setError("Please add your name, a valid email and your shipment details.");
+
+    if (!validate()) {
       return;
     }
-    // functional fallback with no backend: hand off to the mail client
-    const subject = encodeURIComponent(`Quote request — ${form.company || form.name}`);
+
+    setStatus("submitting");
+
+    const { phone, service, origin, destination, cleanDetails } = parseEnquiryDetails(form.details);
+
+    const formData = new URLSearchParams();
+    formData.append("name", form.name.trim());
+    formData.append("company", form.company.trim());
+    formData.append("email", form.email.trim());
+    formData.append("phone", phone);
+    formData.append("service", service);
+    formData.append("origin", origin);
+    formData.append("destination", destination);
+    formData.append("details", cleanDetails.trim() || form.details.trim());
+    formData.append("website", trap); // Google Apps Script honeypot field
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 20000);
+
+    try {
+      const response = await fetch(GOOGLE_SHEETS_URL, {
+        method: "POST",
+        body: formData,
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data && typeof data === "object" && data.success === true && data.referenceId) {
+        setStatus("delivered");
+        setReferenceId(String(data.referenceId));
+      } else {
+        setStatus("error");
+        setServerError(
+          "Unable to submit your enquiry right now. Please try again or contact sales@elvorashipping.com."
+        );
+      }
+    } catch (err) {
+      clearTimeout(timeoutId);
+      console.error("[ELVORA Quote] Google Sheets submission error:", err);
+      setStatus("error");
+      setServerError(
+        "Unable to submit your enquiry right now. Please try again or contact sales@elvorashipping.com."
+      );
+    }
+  };
+
+  const onReset = () => {
+    setForm({ name: "", company: "", email: "", details: "" });
+    setTrap("");
+    setFieldErrors({});
+    setServerError(null);
+    setStatus("idle");
+    setReferenceId(null);
+  };
+
+  const mailtoFallbackUrl = () => {
+    const subject = encodeURIComponent(`Quote request [${referenceId || "New"}] — ${form.company || form.name || "Commercial Enquiry"}`);
     const body = encodeURIComponent(
-      `Name: ${form.name}\nCompany: ${form.company}\nEmail: ${form.email}\n\nShipment details:\n${form.details}`,
+      `ELVORA SHIPPING QUOTE ENQUIRY\nReference: ${referenceId || "Pending"}\n\nName: ${form.name}\nCompany: ${form.company || "N/A"}\nEmail: ${form.email}\n\nShipment details:\n${form.details}\n\n---\nSent via elvorashipping.com`,
     );
-    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
-    setSent(true);
+    return `mailto:${EMAIL}?subject=${subject}&body=${body}`;
   };
 
   const field =
-    "w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary";
+    "w-full border border-border bg-background px-4 py-3 text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary disabled:opacity-60";
 
   return (
     <section id="quote" className="relative overflow-hidden py-28">
       <div className="absolute inset-0">
         <img
           src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=2000&h=1000&fit=crop&auto=format"
-          alt="Cargo vessel at sea"
+          alt="International maritime container ship sailing across ocean trade corridor"
+          loading="lazy"
+          decoding="async"
+          width={2000}
+          height={1000}
           className="h-full w-full object-cover opacity-25"
         />
         <div className="absolute inset-0 bg-background/80" />
@@ -469,7 +576,13 @@ function Quote() {
           <div className="mt-10 space-y-5 text-secondary-foreground">
             <div>
               <div className="label mb-1">Office</div>
-              <div>Dubai, United Arab Emirates</div>
+              <div>{ADDRESS}</div>
+            </div>
+            <div>
+              <div className="label mb-1">Phone</div>
+              <a href={`tel:${PHONE}`} className="text-accent transition-colors hover:text-primary">
+                {PHONE_DISPLAY}
+              </a>
             </div>
             <div>
               <div className="label mb-1">Email</div>
@@ -484,65 +597,217 @@ function Quote() {
           </div>
         </div>
 
-        {sent ? (
-          <div className="reveal flex flex-col justify-center border border-primary/40 bg-card/80 p-10 backdrop-blur">
-            <div className="font-display text-3xl text-primary">Enquiry ready to send.</div>
-            <p className="mt-4 text-secondary-foreground">
-              Your email client should now be open with the details filled in. If it didn&apos;t open, email us
-              directly at{" "}
-              <a href={`mailto:${EMAIL}`} className="text-accent hover:text-primary">
-                {EMAIL}
-              </a>
-              .
+        {status === "delivered" ? (
+          <div
+            className="reveal flex flex-col justify-center border border-primary/50 bg-card/95 p-8 sm:p-10 backdrop-blur shadow-sm"
+            role="status"
+            aria-live="polite"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+              <div className="font-display text-2xl sm:text-3xl text-primary">Enquiry received successfully.</div>
+            </div>
+            <p className="ar mt-2 text-lg text-accent">تم استلام طلبك وتسجيله بنجاح</p>
+
+            <div className="mt-6 rounded border border-border bg-muted/40 p-4 font-mono text-xs">
+              <div className="text-muted-foreground uppercase tracking-wider text-[0.65rem] mb-1">Reference ID</div>
+              <div className="font-bold text-foreground text-sm">Reference ID: {referenceId}</div>
+            </div>
+
+            <p className="mt-5 text-secondary-foreground leading-relaxed">
+              Thank you, <span className="font-medium text-foreground">{form.name || "Valued Client"}</span>. Your enquiry
+              has been received and logged directly into our operations desk in Dubai.
             </p>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              A freight coordinator will review your shipment parameters and reply to{" "}
+              <span className="font-medium text-foreground">{form.email || "your email"}</span> within 2–4 business hours.
+            </p>
+
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={onReset}
+                className="inline-flex items-center justify-center border border-primary bg-primary px-6 py-3 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Submit Another Enquiry
+              </button>
+              <a
+                href={`mailto:${EMAIL}?subject=Follow-up%20on%20Quote%20Request%20${referenceId}`}
+                className="inline-flex items-center justify-center border border-border px-6 py-3 text-sm text-secondary-foreground transition-colors hover:bg-muted"
+              >
+                Direct email follow-up
+              </a>
+            </div>
           </div>
         ) : (
-          <form onSubmit={onSubmit} noValidate className="reveal space-y-5 border border-border bg-card/80 p-8 backdrop-blur">
-            {/* honeypot — hidden from real users, catches bots */}
-            <input
-              type="text"
-              tabIndex={-1}
-              autoComplete="off"
-              value={trap}
-              onChange={(e) => setTrap(e.target.value)}
-              className="absolute left-[-9999px] h-0 w-0 opacity-0"
-              aria-hidden="true"
-            />
-            <label className="block">
-              <span className="label mb-2 block">Full name</span>
-              <input type="text" required maxLength={80} value={form.name} onChange={set("name")} placeholder="Your name" className={field} />
-            </label>
-            <label className="block">
-              <span className="label mb-2 block">Company</span>
-              <input type="text" maxLength={100} value={form.company} onChange={set("company")} placeholder="Company name" className={field} />
-            </label>
-            <label className="block">
-              <span className="label mb-2 block">Email</span>
-              <input type="email" required maxLength={120} value={form.email} onChange={set("email")} placeholder="you@company.com" className={field} />
-            </label>
-            <label className="block">
-              <span className="label mb-2 block">Shipment details</span>
+          <form
+            onSubmit={onSubmit}
+            noValidate
+            className="reveal space-y-5 border border-border bg-card/80 p-8 backdrop-blur"
+            aria-label="Request a Freight Quote Form"
+          >
+            {/* honeypot — hidden from real users, catches automated bots */}
+            <div className="hidden" aria-hidden="true">
+              <label htmlFor="quote-website">Do not fill this field</label>
+              <input
+                id="quote-website"
+                name="website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={trap}
+                onChange={(e) => setTrap(e.target.value)}
+              />
+            </div>
+
+            {serverError && (
+              <div
+                className="border border-[var(--coral)]/50 bg-[var(--coral)]/10 p-4 text-sm text-[var(--coral)]"
+                role="alert"
+              >
+                <div className="font-semibold mb-1">Submission Notice:</div>
+                <p>{serverError}</p>
+                <div className="mt-3 flex flex-wrap gap-3">
+                  <button
+                    type="submit"
+                    disabled={status === "submitting"}
+                    className="inline-flex items-center text-xs font-mono uppercase tracking-wider underline hover:opacity-80 disabled:opacity-50"
+                  >
+                    Retry Submission
+                  </button>
+                  <a
+                    href={mailtoFallbackUrl()}
+                    className="inline-flex items-center text-xs font-mono uppercase tracking-wider underline hover:opacity-80"
+                  >
+                    Send Direct via Email Client →
+                  </a>
+                </div>
+              </div>
+            )}
+
+            <div>
+              <label htmlFor="quote-name" className="label mb-2 block">
+                Full name <span className="text-[var(--coral)]" aria-hidden="true">*</span>
+              </label>
+              <input
+                id="quote-name"
+                name="name"
+                type="text"
+                required
+                maxLength={80}
+                autoComplete="name"
+                disabled={status === "submitting"}
+                value={form.name}
+                onChange={set("name")}
+                placeholder="Your name"
+                className={`${field} ${fieldErrors.name ? "border-[var(--coral)] focus:border-[var(--coral)]" : ""}`}
+                aria-invalid={!!fieldErrors.name}
+                aria-describedby={fieldErrors.name ? "quote-name-error" : undefined}
+              />
+              {fieldErrors.name && (
+                <p id="quote-name-error" role="alert" className="mt-1 text-xs text-[var(--coral)]">
+                  {fieldErrors.name}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="quote-company" className="label mb-2 block">
+                Company <span className="text-xs text-muted-foreground font-normal">(optional)</span>
+              </label>
+              <input
+                id="quote-company"
+                name="company"
+                type="text"
+                maxLength={100}
+                autoComplete="organization"
+                disabled={status === "submitting"}
+                value={form.company}
+                onChange={set("company")}
+                placeholder="Company name"
+                className={field}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="quote-email" className="label mb-2 block">
+                Email <span className="text-[var(--coral)]" aria-hidden="true">*</span>
+              </label>
+              <input
+                id="quote-email"
+                name="email"
+                type="email"
+                required
+                maxLength={120}
+                autoComplete="email"
+                disabled={status === "submitting"}
+                value={form.email}
+                onChange={set("email")}
+                placeholder="you@company.com"
+                className={`${field} ${fieldErrors.email ? "border-[var(--coral)] focus:border-[var(--coral)]" : ""}`}
+                aria-invalid={!!fieldErrors.email}
+                aria-describedby={fieldErrors.email ? "quote-email-error" : undefined}
+              />
+              {fieldErrors.email && (
+                <p id="quote-email-error" role="alert" className="mt-1 text-xs text-[var(--coral)]">
+                  {fieldErrors.email}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="quote-details" className="label mb-2 block">
+                Shipment details <span className="text-[var(--coral)]" aria-hidden="true">*</span>
+              </label>
               <textarea
+                id="quote-details"
+                name="details"
                 rows={3}
                 required
-                maxLength={1000}
+                maxLength={2000}
+                disabled={status === "submitting"}
                 value={form.details}
                 onChange={set("details")}
-                placeholder="Origin, destination, mode, cargo type…"
-                className={`${field} resize-none`}
+                placeholder="Origin, destination, transport mode (Ocean FCL/LCL, Air, Land), cargo volume…"
+                className={`${field} resize-none ${fieldErrors.details ? "border-[var(--coral)] focus:border-[var(--coral)]" : ""}`}
+                aria-invalid={!!fieldErrors.details}
+                aria-describedby={fieldErrors.details ? "quote-details-error" : undefined}
               />
-            </label>
-            {error && <p className="text-sm text-[var(--coral)]">{error}</p>}
+              {fieldErrors.details && (
+                <p id="quote-details-error" role="alert" className="mt-1 text-xs text-[var(--coral)]">
+                  {fieldErrors.details}
+                </p>
+              )}
+            </div>
+
             <button
               type="submit"
-              className="group inline-flex w-full items-center justify-center gap-3 bg-primary px-7 py-4 text-primary-foreground transition-transform hover:-translate-y-0.5"
+              disabled={status === "submitting"}
+              aria-busy={status === "submitting"}
+              className="group inline-flex w-full items-center justify-center gap-3 bg-primary px-7 py-4 text-primary-foreground transition-transform hover:-translate-y-0.5 disabled:opacity-75 disabled:cursor-not-allowed disabled:transform-none"
             >
-              Send enquiry <span className="ar">/ إرسال</span>
-              <span className="transition-transform group-hover:translate-x-1">→</span>
+              {status === "submitting" ? (
+                <>
+                  <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  <span>Submitting...</span>
+                </>
+              ) : (
+                <>
+                  <span>Submit Request</span>
+                  <span className="ar">/ إرسال الطلب</span>
+                  <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+                </>
+              )}
             </button>
-            <p className="text-xs text-muted-foreground">
-              🔒 Your details are used only to answer your enquiry and are never shared. Connect a backend or CRM to
-              store submissions on the server.
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              🔒 Your details are handled confidentially and used solely to route your quotation. All submissions receive priority review by our operations desk in Dubai.
             </p>
           </form>
         )}
@@ -553,28 +818,51 @@ function Quote() {
 
 /* --------------------------------------------------------------- Footer ---- */
 function Footer() {
+  const footerLinks = [
+    { label: "Journey", href: "#journey" },
+    { label: "Services", href: "#services" },
+    { label: "Network", href: "#network" },
+    { label: "Request a Quote", href: "#quote" },
+  ];
+
   return (
     <footer className="border-t border-border bg-background py-14">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
         <div className="flex items-center gap-4">
           <LogoBadge size={72} />
           <div>
-            <img src={logo} alt="ELVORA Shipping L.L.C." className="h-10 w-auto" />
+            <img
+              src={logo}
+              alt="ELVORA Shipping L.L.C."
+              className="h-10 w-auto"
+              width={110}
+              height={40}
+              loading="lazy"
+              decoding="async"
+            />
             <p className="ar text-sm text-secondary-foreground">إلفورا للشحن والخدمات اللوجستية</p>
-            <p className="mt-1 text-sm text-muted-foreground">Shipping &amp; Logistics · Dubai, U.A.E.</p>
-            <a href={`mailto:${EMAIL}`} className="mt-1 inline-block text-sm text-accent transition-colors hover:text-primary">
-              {EMAIL}
-            </a>
+            <p className="mt-1 text-sm text-muted-foreground">{ADDRESS}</p>
+            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+              <a href={`tel:${PHONE}`} className="text-secondary-foreground transition-colors hover:text-primary">
+                {PHONE_DISPLAY}
+              </a>
+              <span className="text-border" aria-hidden="true">·</span>
+              <a href={`mailto:${EMAIL}`} className="text-accent transition-colors hover:text-primary">
+                {EMAIL}
+              </a>
+            </div>
           </div>
         </div>
         <div className="flex flex-wrap gap-x-10 gap-y-3 text-sm text-secondary-foreground">
-          {["Journey", "Services", "Network", "Request a Quote"].map((l) => (
-            <a key={l} href={`#${l.split(" ")[0].toLowerCase()}`} className="hover:text-foreground">
-              {l}
+          {footerLinks.map((item) => (
+            <a key={item.label} href={item.href} className="hover:text-foreground transition-colors">
+              {item.label}
             </a>
           ))}
         </div>
-        <p className="font-mono text-xs text-muted-foreground">© {new Date().getFullYear()} Elvora Shipping L.L.C.</p>
+        <p className="font-mono text-xs text-muted-foreground">
+          © {new Date().getFullYear()} ELVORA Shipping L.L.C. All rights reserved.
+        </p>
       </div>
     </footer>
   );
@@ -584,7 +872,7 @@ function Footer() {
 export default function App() {
   useReveal();
   useEffect(() => {
-    document.title = "ELVORA SHIPING";
+    document.title = "ELVORA Shipping | Global Freight Forwarding & Maritime Logistics Dubai";
   }, []);
   return (
     <div className="min-h-screen bg-background text-foreground">
